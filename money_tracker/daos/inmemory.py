@@ -21,7 +21,7 @@ class BaseInMemoryDao(DataAccessObject):
         return global_simple_storage[self.storage_name]
       
     def save(self, entity: BaseModel) -> BaseModel:
-        entity.id = str(uuid4())
+        entity.id = str(uuid4()) if not entity.id else entity.id
         self.__memory_storage[entity.id] = entity
         return entity
 
@@ -38,11 +38,15 @@ class BaseInMemoryDao(DataAccessObject):
 
     def get(self, entity_id: str) -> BaseModel:
         return self.__memory_storage[entity_id]
+    
+    def clear(self):
+        global_simple_storage[self.storage_name].clear()
+
 
 class GetAll:
     
     def get_all(self):
-        return global_simple_storage[self.__memory_storage].values()
+        return list(global_simple_storage[self.storage_name].values())
     
 
 # Implementations

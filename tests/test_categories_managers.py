@@ -1,15 +1,51 @@
 
 import unittest
-from money_tracker.models import EXPENSE_CATEGORY, INCOME_CATEGORY
-from money_tracker.daos.inmemory import InMemoryTransactionsDAO
+from money_tracker.models import EXPENSE_CATEGORY, INCOME_CATEGORY, Category
+from money_tracker.daos.inmemory import InMemoryTransactionCategoriesDAO, global_simple_storage
 from money_tracker.managers.categories import TransactionCategoriesManager
 
 class TestCategoryManager(unittest.TestCase):
 
-    @property
-    def manager(self) -> TransactionCategoriesManager:
-        dao = InMemoryTransactionsDAO()
-        return TransactionCategoriesManager(dao)
+    manager: TransactionCategoriesManager = None
+
+    def setUp(self) -> None:
+        self.dao = InMemoryTransactionCategoriesDAO()
+        self.manager = TransactionCategoriesManager(self.dao)
+
+        test_data = [
+            Category(
+                id="123",
+                name="Services",
+                category_type=INCOME_CATEGORY
+            ),
+            Category(
+                id='234',
+                name='My work',
+                category_type=INCOME_CATEGORY,
+                parent_category_id='123'
+            ),
+            Category(
+                id='345',
+                name='Home',
+                category_type=EXPENSE_CATEGORY
+            ),
+            Category(
+                id='456',
+                name='Groceries',
+                category_type=EXPENSE_CATEGORY,
+                parent_category_id='345'
+            )
+        ]
+
+        for e in test_data:
+            self.dao.save(e)
+
+
+    def test_get_all(self):
+        categories = self.manager.get_all()
+        print(categories)
+
+        self.assertEqual(4, len(categories))
 
     def test_create_expense_category(self):
         
@@ -33,13 +69,16 @@ class TestCategoryManager(unittest.TestCase):
 
         self.assertIsNotNone(child.parent_category_id)
 
+    def tearDown(self) -> None:
+        self.dao.clear()
+
+    
     # TODO tests to add
     # parent with different type
+    # many levels of hirarchy
     # change name
     # remove category
     
-
-
 
 if __name__ == '__main__':
     unittest.main()

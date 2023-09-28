@@ -24,7 +24,7 @@ INCOME_CATEGORY = 'inc'
 class Category(BaseModel):
     id: Optional[str] = None
     name: str
-    parent_category_id: Optional[str]
+    parent_category_id: Optional[str] = None
     category_type: Literal['exp', 'inc']
 
 class Transaction(BaseModel):
