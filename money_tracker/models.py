@@ -11,18 +11,24 @@ LIABILITIES_ACCOUNT = 'LB'
 INVESTMENT_ACCOUNT = 'IV'
 
 class Account(BaseModel):
-    id: str
+    id: Optional[str]
     name: str
     creation_date: datetime
     account_type: Literal['CH', 'SV', 'LB', 'IV']
     liquidity_type: Literal['low', 'med', 'high']
 
+
+EXPENSE_CATEGORY = 'exp'
+INCOME_CATEGORY = 'inc'
+
 class Category(BaseModel):
+    id: Optional[str] = None
     name: str
-    parent_category_id: str
+    parent_category_id: Optional[str]
     category_type: Literal['exp', 'inc']
 
 class Transaction(BaseModel):
+    id: Optional[str]
     change: Decimal
     account_id: str
     category_id: Optional[str]
