@@ -10,12 +10,26 @@ SAVING_ACCOUNT = 'SV'
 LIABILITIES_ACCOUNT = 'LB'
 INVESTMENT_ACCOUNT = 'IV'
 
+HIGH_LIQUIDITY_TYPE = 'high'
+
+CHECKING_ACCOUNT_TYPE = 'CH'
+SAVINGS_ACCOUNT_TYPE = 'SV'
+LIABILITY_ACCOUNT_TYPE = 'LB'
+INVESTMENT_ACCOUNT_TYPE = 'IV'
+
+ACCOUNT_TYPES = [
+    CHECKING_ACCOUNT_TYPE,
+    SAVINGS_ACCOUNT_TYPE,
+    LIABILITY_ACCOUNT_TYPE,
+    INVESTMENT_ACCOUNT_TYPE
+]
+
 class Account(BaseModel):
-    id: Optional[str]
+    id: Optional[str] = None
     name: str
-    creation_date: datetime
+    creation_date: datetime    
     account_type: Literal['CH', 'SV', 'LB', 'IV']
-    liquidity_type: Literal['low', 'med', 'high']
+    liquidity_type: Literal['low', 'med', 'high'] = HIGH_LIQUIDITY_TYPE
 
 
 EXPENSE_CATEGORY = 'exp'

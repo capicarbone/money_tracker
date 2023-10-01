@@ -1,8 +1,8 @@
 
 import unittest
 from money_tracker.models import EXPENSE_CATEGORY, INCOME_CATEGORY, Category
-from money_tracker.daos.inmemory import InMemoryTransactionCategoriesDAO, global_simple_storage
-from money_tracker.managers.categories import TransactionCategoriesManager
+from money_tracker.daos.inmemory import InMemoryTransactionCategoriesDAO
+from money_tracker.managers import TransactionCategoriesManager
 
 class TestCategoryManager(unittest.TestCase):
 
@@ -42,8 +42,7 @@ class TestCategoryManager(unittest.TestCase):
 
 
     def test_get_all(self):
-        categories = self.manager.get_all()
-        print(categories)
+        categories = self.manager.get_all()        
 
         self.assertEqual(4, len(categories))
 

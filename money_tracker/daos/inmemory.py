@@ -59,7 +59,7 @@ class InMemoryTransactionsDAO(BaseInMemoryDao, AbsTransactionsDAO):
         pass
 
 
-class InMemoryAccountsDAO(AbsAccountsDAO, BaseInMemoryDao, GetAll):
+class InMemoryAccountsDAO(GetAll, BaseInMemoryDao, AbsAccountsDAO):
 
     storage_name = 'accounts'
 
