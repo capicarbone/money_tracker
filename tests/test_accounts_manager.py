@@ -1,6 +1,7 @@
 import unittest
 from datetime import datetime
 
+from .helpers import load_initial_accounts
 from money_tracker.models import Account, LIABILITY_ACCOUNT_TYPE, CHECKING_ACCOUNT_TYPE
 from money_tracker.daos.inmemory import InMemoryAccountsDAO
 from money_tracker.managers import AccountsManager
@@ -8,26 +9,10 @@ from money_tracker.managers import AccountsManager
 class TestAccountssManager(unittest.TestCase):
     
     def setUp(self) -> None:
-        self.dao = InMemoryAccountsDAO()
-        self.manager = AccountsManager(self.dao)
-
-        test_data = [
-            Account(
-                id="123",
-                name="Blue Bank",
-                creation_date=datetime.now(),
-                account_type=CHECKING_ACCOUNT_TYPE
-            ),
-            Account(
-                id="234",
-                name="Green Bank",
-                creation_date=datetime.now(),
-                account_type=LIABILITY_ACCOUNT_TYPE
-            ),
-        ]
-
-        for e in test_data:
-            self.dao.save(e)
+        dao = InMemoryAccountsDAO()
+        self.manager = AccountsManager(dao)
+            
+        load_initial_accounts(dao)
 
     def test_get_all(self):
         accounts = self.manager.get_all()        
@@ -50,7 +35,7 @@ class TestAccountssManager(unittest.TestCase):
 
 
     def tearDown(self) -> None:
-        self.dao.clear()
+        InMemoryAccountsDAO().clear()
 
 if __name__ == '__main__':
     unittest.main()
