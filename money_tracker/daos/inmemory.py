@@ -58,6 +58,10 @@ class InMemoryTransactionsDAO(BaseInMemoryDao, AbsTransactionsDAO):
     def get_transactions(self, account_id: str, start_date: date, end_date: date, limit: int, offset: int) -> List[Transaction]:
         pass
 
+    def save_many(self, transactions: List[Transaction]):
+        for t in transactions:
+            self.save(t)
+
 
 class InMemoryAccountsDAO(GetAll, BaseInMemoryDao, AbsAccountsDAO):
 

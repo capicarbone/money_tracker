@@ -43,8 +43,9 @@ class TransactionsManager:
                 raise Exception(
                     "Invalid category id"
                 )  # TODO create dedicated exception
-            else:
-                self.transactions_dao.save(t)  # save by batch
+            
+                
+        self.transactions_dao.save_many(transactions)
 
         return transactions
 
