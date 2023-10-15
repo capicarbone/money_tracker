@@ -11,7 +11,7 @@ from money_tracker.models import (
     INCOME_TRANSACTION_TYPE,
     EXPENSE_TRANSACTION_TYPE,
     TRANSFER_IN_TRANSACTION_TYPE,
-    TRANSFER_OUT_TRANSACTION_TYPE
+    TRANSFER_OUT_TRANSACTION_TYPE,
 )
 from money_tracker.daos import (
     AbsTransactionCategoriesDAO,
@@ -65,23 +65,32 @@ def load_initial_accounts(dao: AbsAccountsDAO):
 def load_initial_transactions(dao: AbsTransactionsDAO):
     test_data = [
         Transaction(
-            id='123',
+            id="123",
             change=200,
-            account_id='123',
-            category_id='234',
+            account_id="123",
+            category_id="234",
             transaction_type=INCOME_TRANSACTION_TYPE,
-            description='test transaction',
-            execution_date=date.today()
+            description="test transaction",
+            execution_date=date.today(),
         ),
         Transaction(
-            id='123',
+            id="234",
             change=-100,
-            account_id='123',
-            category_id='456',
+            account_id="123",
+            category_id="456",
             transaction_type=EXPENSE_TRANSACTION_TYPE,
-            description='test transaction',
-            execution_date=date.today()
-        )
+            description="test transaction",
+            execution_date=date.today(),
+        ),
+        Transaction(
+            id="345",
+            change=-100,
+            account_id="234",
+            category_id="234",
+            transaction_type=INCOME_TRANSACTION_TYPE,
+            description="test transaction",
+            execution_date=date.today(),
+        ),
     ]
 
     for e in test_data:

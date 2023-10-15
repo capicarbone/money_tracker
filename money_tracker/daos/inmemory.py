@@ -56,7 +56,13 @@ class InMemoryTransactionsDAO(BaseInMemoryDao, AbsTransactionsDAO):
     storage_name = 'transactions'
 
     def get_transactions(self, account_id: str, start_date: date, end_date: date, limit: int, offset: int) -> List[Transaction]:
-        pass
+        
+        filtered_items = global_simple_storage[self.storage_name].values()        
+
+        if account_id:
+            filtered_items = filter(lambda x: x.account_id == account_id, filtered_items)
+
+        return list(filtered_items)
 
     def save_many(self, transactions: List[Transaction]):
         for t in transactions:

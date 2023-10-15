@@ -115,9 +115,16 @@ class TransactionsManager:
         pass
 
     def get_transactions(
-        account_id: str, start_date: date, end_date: str, limit: int, offset: int
+        self, account_id: str = None, start_date: date = None, end_date: str = None, limit: int = 100, offset: int = 0
     ) -> List[Transaction]:
-        pass
+        return self.transactions_dao.get_transactions(
+            account_id=account_id,
+            start_date=start_date,
+            end_date=end_date,
+            limit=limit,
+            offset=offset
+        )
+
 
     def move_transaction(transaction_id: str, account_id: str):
         pass

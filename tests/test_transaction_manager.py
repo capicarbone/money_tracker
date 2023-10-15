@@ -32,6 +32,11 @@ class TestTransactionsManager(unittest.TestCase):
             categories_dao=InMemoryTransactionCategoriesDAO(),
         )
 
+    def tearDown(self) -> None:
+        InMemoryAccountsDAO().clear()
+        InMemoryTransactionCategoriesDAO().clear()
+        InMemoryTransactionsDAO().clear()
+
     def test_add_valid_income(self):
         income = self.manager.add_income(
             change=Decimal("223.12"),
@@ -68,3 +73,18 @@ class TestTransactionsManager(unittest.TestCase):
         self.assertIsNotNone(transfer_out.id)
         self.assertEqual(transfer_in.account_id, "234")
         self.assertEqual(transfer_out.account_id, "123")
+
+
+    def test_get_transactions_by_account(self):
+
+        test_account_id = "123"
+
+        transactions = self.manager.get_transactions(account_id=test_account_id)
+
+        self.assertEqual(2, len(transactions))
+
+        for t in transactions:
+            self.assertEqual(test_account_id, t.account_id)
+
+
+
