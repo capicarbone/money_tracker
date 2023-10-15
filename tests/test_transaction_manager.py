@@ -86,5 +86,17 @@ class TestTransactionsManager(unittest.TestCase):
         for t in transactions:
             self.assertEqual(test_account_id, t.account_id)
 
+    def test_remove_existing_transaction(self):
+
+        test_transaction_id = "123"
+
+        self.manager.remove_transaction(test_transaction_id)
+
+        total_transactions = len(self.manager.get_transactions())
+
+        self.assertEqual(2, total_transactions)
+
+    # TODO transactions with differente limit and offset
+
 
 

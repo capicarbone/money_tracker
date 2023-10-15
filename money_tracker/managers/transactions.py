@@ -102,8 +102,8 @@ class TransactionsManager:
 
         return transfer_in, transfer_out
 
-    def remove_transaction(transaction_id: str):
-        pass
+    def remove_transaction(self, transaction_id: str):
+        self.transactions_dao.delete(transaction_id)
 
     def update_transaction(
         transaction_id: str,
@@ -126,5 +126,5 @@ class TransactionsManager:
         )
 
 
-    def move_transaction(transaction_id: str, account_id: str):
+    def move_transaction(self, transaction_id: str, account_id: str):
         pass
