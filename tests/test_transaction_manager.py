@@ -74,9 +74,7 @@ class TestTransactionsManager(unittest.TestCase):
         self.assertEqual(transfer_in.account_id, "234")
         self.assertEqual(transfer_out.account_id, "123")
 
-
     def test_get_transactions_by_account(self):
-
         test_account_id = "123"
 
         transactions = self.manager.get_transactions(account_id=test_account_id)
@@ -87,7 +85,6 @@ class TestTransactionsManager(unittest.TestCase):
             self.assertEqual(test_account_id, t.account_id)
 
     def test_remove_existing_transaction(self):
-
         test_transaction_id = "123"
 
         self.manager.remove_transaction(test_transaction_id)
@@ -96,7 +93,33 @@ class TestTransactionsManager(unittest.TestCase):
 
         self.assertEqual(2, total_transactions)
 
+    def test_change_amount(self):
+        test_transaction_id = "123"
+
+        dao = InMemoryTransactionsDAO()
+        original_change = dao.get(test_transaction_id).change
+
+        new_change = Decimal("777.12")
+
+        self.manager.update_transaction(
+            transaction_id=test_transaction_id, change=new_change
+        )
+
+        changed_transaction = dao.get(test_transaction_id)
+
+        self.assertEqual(new_change, changed_transaction.change)
+        self.assertNotEqual(original_change, changed_transaction.change)
+
+    def test_move_transaction(self):
+        test_transaction_id = "123"
+        new_account_id = "234"
+
+        self.manager.move_transaction(test_transaction_id, new_account_id)
+
+        moved_transaction: Transaction = InMemoryTransactionsDAO().get(
+            test_transaction_id
+        )
+
+        self.assertEqual(moved_transaction.account_id, new_account_id)
+
     # TODO transactions with differente limit and offset
-
-
-

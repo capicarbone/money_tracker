@@ -43,8 +43,7 @@ class TransactionsManager:
                 raise Exception(
                     "Invalid category id"
                 )  # TODO create dedicated exception
-            
-                
+
         self.transactions_dao.save_many(transactions)
 
         return transactions
@@ -106,25 +105,38 @@ class TransactionsManager:
         self.transactions_dao.delete(transaction_id)
 
     def update_transaction(
+        self,
         transaction_id: str,
-        change: Decimal,
-        account_id: str,
-        category_id: str,
-        execution_time: date,
+        change: Decimal = None,
+        account_id: str = None,
+        category_id: str = None,
+        execution_time: date = None,
     ):
-        pass
+        transaction: Transaction = self.transactions_dao.get(transaction_id)
+
+        if change:
+            transaction.change = change
+
+        if account_id:
+            transaction.account_id = account_id
+
+        self.transactions_dao.update(transaction)
 
     def get_transactions(
-        self, account_id: str = None, start_date: date = None, end_date: str = None, limit: int = 100, offset: int = 0
+        self,
+        account_id: str = None,
+        start_date: date = None,
+        end_date: str = None,
+        limit: int = 100,
+        offset: int = 0,
     ) -> List[Transaction]:
         return self.transactions_dao.get_transactions(
             account_id=account_id,
             start_date=start_date,
             end_date=end_date,
             limit=limit,
-            offset=offset
+            offset=offset,
         )
 
-
     def move_transaction(self, transaction_id: str, account_id: str):
-        pass
+        self.update_transaction(transaction_id=transaction_id, account_id=account_id)

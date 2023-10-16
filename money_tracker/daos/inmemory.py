@@ -24,6 +24,9 @@ class BaseInMemoryDao(DataAccessObject):
         entity.id = str(uuid4()) if not entity.id else entity.id
         self.__memory_storage[entity.id] = entity
         return entity
+    
+    def get(self, entity_id) -> BaseModel:
+        return self.__memory_storage[entity_id]
 
     def exists(self, entity_id: str) -> bool:
         return entity_id in self.__memory_storage
