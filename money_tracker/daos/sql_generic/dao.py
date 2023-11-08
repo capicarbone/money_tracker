@@ -5,8 +5,8 @@ from sqlalchemy import create_engine, Engine, select
 from sqlalchemy.orm import Session
 from money_tracker.managers import accounts
 from money_tracker.models import *
-from money_tracker.daos.base import DataAccessObject, AbsTransactionsDAO, AbsAccountsDAO
-from money_tracker.daos.sql_generic.models import MappedAccount
+from money_tracker.daos.base import AbsTransactionCategoriesDAO, DataAccessObject, AbsTransactionsDAO, AbsAccountsDAO
+from money_tracker.daos.sql_generic.models import MappedAccount, MappedCategory
 from money_tracker.models import Account
 
 T = TypeVar("T")
@@ -51,9 +51,25 @@ class SQLGetAllImplementationMixin(Generic[S]):
         return accounts
 
 
-class GenericSQLAccountDao(
+class GenericSQLAccountDAO(
     BaseSQLEntityDAO[MappedAccount, Account],
     SQLGetAllImplementationMixin[Account],
     AbsAccountsDAO,
 ):
     model_class = MappedAccount
+
+    def delete(self, entity: BaseModel):
+        # Validate no related transactions
+        return super().delete(entity)
+
+
+class GenericSQLCategoryDAO(
+    BaseSQLEntityDAO[MappedCategory, Category],
+    SQLGetAllImplementationMixin[Category],
+    AbsTransactionCategoriesDAO
+):
+    model_class = MappedCategory
+
+    def delete(self, entity: BaseModel):
+        # Validate no related transactions
+        return super().delete(entity)

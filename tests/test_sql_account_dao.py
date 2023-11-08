@@ -3,27 +3,22 @@ from datetime import date
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from tests.helpers import load_initial_accounts
-from money_tracker.daos.sql_generic.dao import GenericSQLAccountDao
+from money_tracker.daos.sql_generic.dao import GenericSQLAccountDAO
 import money_tracker.daos.sql_generic.models as db
 
 from money_tracker.models import Account
 
 
-class TestSQLAccountDAO(unittest.TestCase):
-
-    initial_accounts = [
-
-    ]
+class TestSQLAccountDAO(unittest.TestCase):    
 
     def setUp(self) -> None:
         self.engine = create_engine("sqlite+pysqlite:///tests/test.db")
         db.Base.metadata.drop_all(self.engine)
         db.Base.metadata.create_all(self.engine)
 
-        self.dao = GenericSQLAccountDao(self.engine)
+        self.dao = GenericSQLAccountDAO(self.engine)
 
         load_initial_accounts(self.dao)
-
 
     def test_create_valid_account(self):
         attrs = {
@@ -48,7 +43,6 @@ class TestSQLAccountDAO(unittest.TestCase):
 
         self.assertEqual(2, len(accounts), "Wrong account count.")
 
-    
     def test_exists(self):
         result = self.dao.exists("234")
 
@@ -60,3 +54,5 @@ class TestSQLAccountDAO(unittest.TestCase):
 
     def tearDown(self) -> None:
         db.Base.metadata.drop_all(self.engine)
+
+
