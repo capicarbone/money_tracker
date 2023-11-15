@@ -1,11 +1,11 @@
-
 from typing import List, Optional, Literal
-from datetime import datetime
-from sqlalchemy import ForeignKey
-from sqlalchemy.types import String, Date
+from decimal import Decimal
+from datetime import datetime, date
+from sqlalchemy import DateTime, ForeignKey
+from sqlalchemy.types import String, Date, Float
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
-from money_tracker.models import Account, Category
+from money_tracker.models import Account, Category, Transaction
 
 
 class Base(DeclarativeBase):
@@ -13,7 +13,7 @@ class Base(DeclarativeBase):
 
 
 class MappedAccount(Base):
-    __tablename__='account'
+    __tablename__ = "account"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(30))
@@ -27,11 +27,12 @@ class MappedAccount(Base):
             name=self.name,
             creation_date=self.creation_date,
             account_type=self.account_type,
-            liquidity_type=self.liquidity_type
+            liquidity_type=self.liquidity_type,
         )
 
+
 class MappedCategory(Base):
-    __tablename__='category'
+    __tablename__ = "category"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(30))
@@ -44,8 +45,34 @@ class MappedCategory(Base):
             id=str(self.id),
             name=self.name,
             category_type=self.category_type,
-            parent_category_id=str(self.parent_category_id)
+            parent_category_id=str(self.parent_category_id),
         )
-    
 
-    
+
+class MappedTransaction(Base):
+    __tablename__ = "transaction"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    change: Mapped[Decimal] = mapped_column(Float(asdecimal=True))
+    account_id: Mapped["MappedAccount"] = mapped_column(ForeignKey("account.id"))
+    category_id: Mapped[Optional["MappedCategory"]] = mapped_column(
+        ForeignKey("category.id")
+    )
+    transaction_type: Mapped[Literal] = mapped_column(String(7))
+    description: Mapped[str] = mapped_column(String(250))
+    execution_date: Mapped[date] = mapped_column(Date)
+    creation_date: Mapped[datetime] = mapped_column(DateTime)
+    group_id: Mapped[Optional[str]] = mapped_column(String(36))
+
+    def to_object(self):
+        return Transaction(
+            id=str(self.id),
+            change=self.change,
+            account_id=str(self.account_id),
+            category_id=str(self.category_id),
+            transaction_type=self.transaction_type,
+            description=self.description,
+            execution_date=self.execution_date,
+            creation_date=self.creation_date,
+            group_id=self.group_id,
+        )

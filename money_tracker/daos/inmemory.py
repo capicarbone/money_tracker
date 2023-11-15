@@ -72,7 +72,7 @@ class InMemoryTransactionsDAO(BaseInMemoryDao, AbsTransactionsDAO):
 
         return list(filtered_items)[offset:offset+limit]
 
-    def save_many(self, transactions: List[Transaction]):
+    def save_group(self, transactions: List[Transaction]):
         for t in transactions:
             self.save(t)
 

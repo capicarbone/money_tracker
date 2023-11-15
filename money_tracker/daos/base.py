@@ -32,7 +32,7 @@ class AbsTransactionsDAO(DataAccessObject):
     ) -> List[Transaction]:
         raise NotImplementedError()
 
-    def save_many(self, transactions: List[Transaction]):
+    def save_group(self, transactions: List[Transaction]):
         raise NotImplementedError()
 
 

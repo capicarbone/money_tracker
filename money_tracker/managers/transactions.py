@@ -44,7 +44,7 @@ class TransactionsManager:
                     "Invalid category id"
                 )  # TODO create dedicated exception
 
-        self.transactions_dao.save_many(transactions)
+        self.transactions_dao.save_group(transactions)
 
         return transactions
 
