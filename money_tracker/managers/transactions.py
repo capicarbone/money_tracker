@@ -130,7 +130,7 @@ class TransactionsManager:
         limit: int = 100,
         offset: int = 0,
     ) -> List[Transaction]:
-        return self.transactions_dao.get_transactions(
+        return self.transactions_dao.filter(
             account_id=account_id,
             start_date=start_date,
             end_date=end_date,

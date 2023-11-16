@@ -27,7 +27,7 @@ class DataAccessObject:
 
 
 class AbsTransactionsDAO(DataAccessObject):
-    def get_transactions(
+    def filter(
         self, account_id: str, start_date: date, end_date: date, limit: int, offset: int
     ) -> List[Transaction]:
         raise NotImplementedError()

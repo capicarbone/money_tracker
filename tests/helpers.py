@@ -91,6 +91,24 @@ def load_initial_transactions(dao: AbsTransactionsDAO):
             description="test transaction",
             execution_date=date.today(),
         ),
+        Transaction(
+            id="456",
+            change=-444.20,
+            account_id="234",
+            category_id="234",
+            transaction_type=EXPENSE_TRANSACTION_TYPE,
+            description="test transaction",
+            execution_date=date.today(),
+        ),
+                Transaction(
+            id="567",
+            change=-222.20,
+            account_id="234",
+            category_id="234",
+            transaction_type=EXPENSE_TRANSACTION_TYPE,
+            description="test transaction",
+            execution_date=date.today(),
+        ),
     ]
 
     for e in test_data:

@@ -1,5 +1,5 @@
 from uuid import uuid4
-from datetime import datetime
+from datetime import date, datetime
 from typing import List, Generic, TypeVar
 from pydantic import BaseModel
 from sqlalchemy import create_engine, Engine, delete, select
@@ -132,3 +132,25 @@ class GenericSQLTransactionDAO(
                 session.delete(db_obj)
 
             session.commit()
+
+    def filter(
+        self,
+        account_id: str = None,
+        start_date: date = None,
+        end_date: date = None,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> List[Transaction]:
+        with Session(self.engine) as session:
+            stmt = select(MappedTransaction)
+
+            if account_id:
+                stmt = stmt.where(MappedTransaction.account_id == account_id)
+
+            stmt = stmt.limit(limit).offset(offset)   
+
+            result = session.execute(stmt).scalars()
+
+            transactions = [r.to_object() for r in result]
+
+            return transactions

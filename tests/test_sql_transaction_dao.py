@@ -121,5 +121,14 @@ class TestSQLACategoryDAO(unittest.TestCase):
         with Session(self.engine) as session:
             self.assertIsNone(session.get(MappedTransaction, 123))
 
+    def test_get_transactions_for_an_account(self):
+        test_account_id = "123"
+        transactions = self.dao.filter(account_id="123", limit=5)
+
+        self.assertEqual(2, len(transactions))
+
+        for t in transactions:
+            self.assertEqual(test_account_id, t.account_id)
+
     def tearDown(self) -> None:
         Base.metadata.drop_all(self.engine)

@@ -91,7 +91,7 @@ class TestTransactionsManager(unittest.TestCase):
 
         total_transactions = len(self.manager.get_transactions())
 
-        self.assertEqual(2, total_transactions)
+        self.assertEqual(4, total_transactions)
 
     def test_change_amount(self):
         test_transaction_id = "123"
