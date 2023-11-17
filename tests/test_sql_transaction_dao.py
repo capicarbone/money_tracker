@@ -130,5 +130,29 @@ class TestSQLACategoryDAO(unittest.TestCase):
         for t in transactions:
             self.assertEqual(test_account_id, t.account_id)
 
+    def test_get_transactions_by_date(self):
+        start_date = date(2023, 3, 3)
+        end_date = date(2023, 12, 31)
+        transactions = self.dao.filter(start_date=start_date, end_date=end_date)
+
+        self.assertEqual(3, len(transactions))
+
+        for t in transactions:
+            self.assertGreaterEqual(t.execution_date, start_date)
+            self.assertLessEqual(t.execution_date, end_date)
+
+    def test_wrong_dates_in_filter_raises_exception(self):
+        with self.assertRaises(Exception):
+            self.dao.filter(start_date=date(2023, 12, 1), end_date=date(2023, 1, 1))
+
+    def test_default_ordering_by_execution_date(self):
+        transactions = self.dao.filter()
+
+        for i, _ in enumerate(transactions):
+            if len(transactions) != i + 1:
+                self.assertGreater(
+                    transactions[i].execution_date, transactions[i + 1].execution_date
+                )
+
     def tearDown(self) -> None:
         Base.metadata.drop_all(self.engine)

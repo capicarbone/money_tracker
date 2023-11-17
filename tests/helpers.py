@@ -71,7 +71,7 @@ def load_initial_transactions(dao: AbsTransactionsDAO):
             category_id="234",
             transaction_type=INCOME_TRANSACTION_TYPE,
             description="test transaction",
-            execution_date=date.today(),
+            execution_date=date(2023, 2, 2),
         ),
         Transaction(
             id="234",
@@ -80,7 +80,7 @@ def load_initial_transactions(dao: AbsTransactionsDAO):
             category_id="456",
             transaction_type=EXPENSE_TRANSACTION_TYPE,
             description="test transaction",
-            execution_date=date.today(),
+            execution_date=date(2023, 1, 1),
         ),
         Transaction(
             id="345",
@@ -89,7 +89,7 @@ def load_initial_transactions(dao: AbsTransactionsDAO):
             category_id="234",
             transaction_type=INCOME_TRANSACTION_TYPE,
             description="test transaction",
-            execution_date=date.today(),
+            execution_date=date(2023, 5, 5),
         ),
         Transaction(
             id="456",
@@ -98,16 +98,16 @@ def load_initial_transactions(dao: AbsTransactionsDAO):
             category_id="234",
             transaction_type=EXPENSE_TRANSACTION_TYPE,
             description="test transaction",
-            execution_date=date.today(),
+            execution_date=date(2023, 4, 4),
         ),
-                Transaction(
+        Transaction(
             id="567",
             change=-222.20,
             account_id="234",
             category_id="234",
             transaction_type=EXPENSE_TRANSACTION_TYPE,
             description="test transaction",
-            execution_date=date.today(),
+            execution_date=date(2023, 3, 3),
         ),
     ]
 

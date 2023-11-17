@@ -144,10 +144,20 @@ class GenericSQLTransactionDAO(
         with Session(self.engine) as session:
             stmt = select(MappedTransaction)
 
+            if start_date and end_date:
+                if end_date < start_date:
+                    raise Exception("start_date must be before end_date")
+
             if account_id:
                 stmt = stmt.where(MappedTransaction.account_id == account_id)
 
-            stmt = stmt.limit(limit).offset(offset)   
+            if start_date:
+                stmt = stmt.where(MappedTransaction.execution_date >= start_date)
+
+            if end_date:
+                stmt = stmt.where(MappedTransaction.execution_date <= end_date)
+
+            stmt = stmt.limit(limit).offset(offset).order_by(MappedTransaction.execution_date.desc() )
 
             result = session.execute(stmt).scalars()
 
