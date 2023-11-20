@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from money_tracker.managers import accounts
 from money_tracker.models import *
 from money_tracker.daos.base import (
-    AbsTransactionCategoriesDAO,
+    AbsTransactionCategoryDAO,
     DataAccessObject,
     AbsTransactionsDAO,
     AbsAccountsDAO,
@@ -80,7 +80,7 @@ class GenericSQLAccountDAO(
 class GenericSQLCategoryDAO(
     BaseSQLEntityDAO[MappedCategory, Category],
     SQLGetAllImplementationMixin[Category],
-    AbsTransactionCategoriesDAO,
+    AbsTransactionCategoryDAO,
 ):
     model_class = MappedCategory
 

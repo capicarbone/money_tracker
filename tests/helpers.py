@@ -14,13 +14,13 @@ from money_tracker.models import (
     TRANSFER_OUT_TRANSACTION_TYPE,
 )
 from money_tracker.daos import (
-    AbsTransactionCategoriesDAO,
+    AbsTransactionCategoryDAO,
     AbsAccountsDAO,
     AbsTransactionsDAO,
 )
 
 
-def load_initial_categories(dao: AbsTransactionCategoriesDAO):
+def load_initial_categories(dao: AbsTransactionCategoryDAO):
     test_data = [
         Category(id="123", name="Services", category_type=INCOME_CATEGORY),
         Category(

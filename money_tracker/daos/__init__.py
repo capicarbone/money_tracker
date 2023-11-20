@@ -1,2 +1,2 @@
-from .base import AbsTransactionCategoriesDAO, AbsAccountsDAO
+from .base import AbsTransactionCategoryDAO, AbsAccountsDAO
 from .inmemory import *

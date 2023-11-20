@@ -1,11 +1,11 @@
 from typing import List
-from money_tracker.daos.base import AbsTransactionCategoriesDAO
+from money_tracker.daos.base import AbsTransactionCategoryDAO
 from money_tracker.models import Category, EXPENSE_CATEGORY, INCOME_CATEGORY
 
 class TransactionCategoriesManager:
-    categories_dao : AbsTransactionCategoriesDAO
+    categories_dao : AbsTransactionCategoryDAO
 
-    def __init__(self, categories_dao: AbsTransactionCategoriesDAO) -> None:
+    def __init__(self, categories_dao: AbsTransactionCategoryDAO) -> None:
         self.categories_dao = categories_dao
 
     def get_all(self) -> List[Category]:        

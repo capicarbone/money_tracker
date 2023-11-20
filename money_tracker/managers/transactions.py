@@ -13,20 +13,20 @@ from money_tracker.models import (
 from money_tracker.daos.base import (
     AbsAccountsDAO,
     AbsTransactionsDAO,
-    AbsTransactionCategoriesDAO,
+    AbsTransactionCategoryDAO,
 )
 
 
 class TransactionsManager:
     accounts_dao: AbsAccountsDAO
     transactions_dao: AbsTransactionsDAO
-    categories_dao: AbsTransactionCategoriesDAO
+    categories_dao: AbsTransactionCategoryDAO
 
     def __init__(
         self,
         accounts_dao: AbsAccountsDAO,
         transactions_dao: AbsTransactionsDAO,
-        categories_dao: AbsTransactionCategoriesDAO,
+        categories_dao: AbsTransactionCategoryDAO,
     ) -> None:
         self.accounts_dao = accounts_dao
         self.transactions_dao = transactions_dao

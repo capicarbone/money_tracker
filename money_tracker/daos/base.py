@@ -41,6 +41,40 @@ class AbsAccountsDAO(DataAccessObject):
         raise NotImplementedError()
 
 
-class AbsTransactionCategoriesDAO(DataAccessObject):
+class AbsTransactionCategoryDAO(DataAccessObject):
     def get_all(self) -> List[Category]:
         raise NotImplementedError()
+
+class AbsDaoFactory():
+
+    transaction_dao : AbsTransactionsDAO = None
+    account_dao : AbsAccountsDAO = None
+    category_dao : AbsTransactionCategoryDAO = None
+
+    def _create_transaction_dao(self) -> AbsTransactionsDAO:
+        raise NotImplementedError()
+
+    def get_transaction_dao(self) -> AbsTransactionsDAO:
+        if not self.transaction_dao:
+            self.transaction_dao = self._create_transaction_dao()
+
+        return self.transaction_dao
+    
+    def _create_category_dao(self) -> AbsTransactionCategoryDAO:
+        raise NotImplementedError()
+    
+    def get_category_dao(self) -> AbsTransactionCategoryDAO:
+        if not self.category_dao:
+            self.category_dao = self._create_category_dao()
+
+        return self.category_dao
+    
+    def _create_account_dao(self) -> AbsAccountsDAO:
+        raise NotImplementedError()
+    
+    def get_account_dao(self) -> AbsAccountsDAO:
+        if not self.account_dao:
+            self.account_dao = self._create_account_dao()
+
+        return self.account_dao
+        
