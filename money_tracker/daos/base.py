@@ -45,7 +45,7 @@ class AbsTransactionCategoryDAO(DataAccessObject):
     def get_all(self) -> List[Category]:
         raise NotImplementedError()
 
-class AbsDaoFactory():
+class AbsDAOFactory():
 
     transaction_dao : AbsTransactionsDAO = None
     account_dao : AbsAccountsDAO = None

@@ -1,7 +1,7 @@
 from sqlalchemy import Engine, create_engine
 from money_tracker.daos.base import (
     AbsAccountsDAO,
-    AbsDaoFactory,
+    AbsDAOFactory,
     AbsTransactionCategoryDAO,
     AbsTransactionsDAO,
 )
@@ -12,7 +12,7 @@ from money_tracker.daos.sql_generic.dao import (
 )
 
 
-class SQLiteDAOFactory(AbsDaoFactory):
+class SQLiteDAOFactory(AbsDAOFactory):
     engine: Engine = None
 
     def __init__(self, file_path) -> None:
