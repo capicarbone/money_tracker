@@ -51,6 +51,7 @@ class TestSQLACategoryDAO(unittest.TestCase):
 
         self.assertIsNotNone(new_transaction.id)
         self.assertIsNotNone(new_transaction.creation_date)
+        self.assertIsNone(new_transaction.group_id)
         self.assertEqual(Decimal("133.22"), new_transaction.change)
 
     def test_create_many_transactions(self):

@@ -56,7 +56,7 @@ class Transaction(BaseModel):
     account_id: str
     category_id: Optional[str] = None
     transaction_type: Literal["inc", "exp", "tranin", "tranout", "div", "prof", "los"]
-    description: Optional[str] = None
+    description: Optional[str] = ""
     execution_date: date
     creation_date: datetime = None
     group_id: Optional[str] = None

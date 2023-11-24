@@ -18,9 +18,9 @@ class SQLiteDAOFactory(AbsDAOFactory):
 
     def __init__(self, file_path) -> None:
         self.engine = create_engine(f"sqlite+pysqlite:///{file_path}")
+
         if not inspect(self.engine).has_table("account"):
             Base.metadata.create_all(self.engine)
-
 
     def _create_account_dao(self) -> AbsAccountsDAO:
         return GenericSQLAccountDAO(self.engine)
