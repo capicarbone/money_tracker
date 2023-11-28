@@ -95,8 +95,10 @@ class GenericSQLTransactionDAO(
     model_class = MappedTransaction
 
     def save(self, entity: Transaction) -> Transaction:
-        entity.creation_date = datetime.today()
-        return super().save(entity)
+        # entity.creation_date = datetime.today()
+        # return super().save(entity)
+
+        raise Exception("Use save_group instead.")
 
     def save_group(self, transactions: List[Transaction]):
         creation_time = datetime.today()
@@ -106,10 +108,14 @@ class GenericSQLTransactionDAO(
             rows = {}
             for t in transactions:
                 t.creation_date = creation_time
-                t.group_id = group_id
+                if len(transactions) > 1:
+                    t.group_id = group_id
                 row = self.model_class(**t.model_dump())
                 session.add(row)
                 rows[row] = t
+
+                account: MappedAccount = session.get(MappedAccount, t.account_id)
+                account.balance += t.change
 
             session.commit()
 

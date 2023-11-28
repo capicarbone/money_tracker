@@ -2,7 +2,7 @@ from typing import List, Optional, Literal
 from decimal import Decimal
 from datetime import datetime, date
 from sqlalchemy import DateTime, ForeignKey
-from sqlalchemy.types import String, Date, Float
+from sqlalchemy.types import String, Date, Float, Boolean
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 from money_tracker.models import Account, Category, Transaction
@@ -20,6 +20,8 @@ class MappedAccount(Base):
     creation_date: Mapped[datetime] = mapped_column(Date)
     account_type: Mapped[Literal] = mapped_column(String(2))
     liquidity_type: Mapped[Literal] = mapped_column(String(4))
+    is_active: Mapped[bool] = mapped_column(Boolean)
+    balance: Mapped[Decimal] = mapped_column(Float(asdecimal=True))
 
     def to_object(self) -> Account:
         return Account(

@@ -10,6 +10,7 @@ class MoneyTracker:
     categories: TransactionCategoriesManager = None
 
     def __init__(self, daos_factory: AbsDAOFactory) -> None:
+        
         self.transactions = TransactionsManager(
             accounts_dao=daos_factory.get_account_dao(),
             transactions_dao=daos_factory.get_transaction_dao(),

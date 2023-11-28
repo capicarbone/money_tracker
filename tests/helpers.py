@@ -64,24 +64,28 @@ def load_initial_accounts(dao: AbsAccountsDAO):
 
 def load_initial_transactions(dao: AbsTransactionsDAO):
     test_data = [
-        Transaction(
-            id="123",
-            change=200,
-            account_id="123",
-            category_id="234",
-            transaction_type=INCOME_TRANSACTION_TYPE,
-            description="test transaction",
-            execution_date=date(2023, 2, 2),
-        ),
-        Transaction(
-            id="234",
-            change=-100,
-            account_id="123",
-            category_id="456",
-            transaction_type=EXPENSE_TRANSACTION_TYPE,
-            description="test transaction",
-            execution_date=date(2023, 1, 1),
-        ),
+        [
+            Transaction(
+                id="123",
+                change=200,
+                account_id="123",
+                category_id="234",
+                transaction_type=INCOME_TRANSACTION_TYPE,
+                description="test transaction",
+                execution_date=date(2023, 2, 2),
+            )
+        ],
+        [
+            Transaction(
+                id="234",
+                change=-100,
+                account_id="123",
+                category_id="456",
+                transaction_type=EXPENSE_TRANSACTION_TYPE,
+                description="test transaction",
+                execution_date=date(2023, 1, 1),
+            )
+        ],[
         Transaction(
             id="345",
             change=-100,
@@ -90,26 +94,30 @@ def load_initial_transactions(dao: AbsTransactionsDAO):
             transaction_type=INCOME_TRANSACTION_TYPE,
             description="test transaction",
             execution_date=date(2023, 5, 5),
-        ),
-        Transaction(
-            id="456",
-            change=-444.20,
-            account_id="234",
-            category_id="234",
-            transaction_type=EXPENSE_TRANSACTION_TYPE,
-            description="test transaction",
-            execution_date=date(2023, 4, 4),
-        ),
-        Transaction(
-            id="567",
-            change=-222.20,
-            account_id="234",
-            category_id="234",
-            transaction_type=EXPENSE_TRANSACTION_TYPE,
-            description="test transaction",
-            execution_date=date(2023, 3, 3),
-        ),
+        )],
+        [
+            Transaction(
+                id="456",
+                change=-444.20,
+                account_id="234",
+                category_id="234",
+                transaction_type=EXPENSE_TRANSACTION_TYPE,
+                description="test transaction",
+                execution_date=date(2023, 4, 4),
+            )
+        ],
+        [
+            Transaction(
+                id="567",
+                change=-222.20,
+                account_id="234",
+                category_id="234",
+                transaction_type=EXPENSE_TRANSACTION_TYPE,
+                description="test transaction",
+                execution_date=date(2023, 3, 3),
+            )
+        ],
     ]
 
     for e in test_data:
-        dao.save(e)
+        dao.save_group(e)

@@ -47,7 +47,7 @@ class TestSQLACategoryDAO(unittest.TestCase):
 
         test_transaction = Transaction(**attrs)
 
-        new_transaction = self.dao.save(test_transaction)
+        new_transaction = self.dao.save_group([test_transaction])[0]
 
         self.assertIsNotNone(new_transaction.id)
         self.assertIsNotNone(new_transaction.creation_date)

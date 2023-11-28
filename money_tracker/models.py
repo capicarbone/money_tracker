@@ -40,6 +40,8 @@ class Account(BaseModel):
     creation_date: datetime
     account_type: Literal["CH", "SV", "LB", "IV"]
     liquidity_type: Literal["low", "med", "high"] = HIGH_LIQUIDITY_TYPE
+    is_active: bool = True
+    balance: Decimal = Decimal("0.0")
     # TODO add is_archived
 
 
