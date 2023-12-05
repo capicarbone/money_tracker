@@ -9,8 +9,8 @@ from money_tracker.daos.base import DataAccessObject, AbsTransactionsDAO, AbsAcc
 
 global_simple_storage = {}
 
+
 class BaseInMemoryDao(DataAccessObject):
-      
     storage_name = None
 
     @property
@@ -19,12 +19,12 @@ class BaseInMemoryDao(DataAccessObject):
             global_simple_storage[self.storage_name] = {}
 
         return global_simple_storage[self.storage_name]
-      
+
     def save(self, entity: BaseModel) -> BaseModel:
         entity.id = str(uuid4()) if not entity.id else entity.id
         self.__memory_storage[entity.id] = entity
         return entity
-    
+
     def get(self, entity_id) -> BaseModel:
         return self.__memory_storage[entity_id]
 
@@ -33,7 +33,7 @@ class BaseInMemoryDao(DataAccessObject):
 
     def delete(self, entity_id: str):
         if self.exists(entity_id):
-            del(self.__memory_storage[entity_id])
+            del self.__memory_storage[entity_id]
 
     def update(self, entity: BaseModel):
         if self.exists(entity.id):
@@ -41,36 +41,38 @@ class BaseInMemoryDao(DataAccessObject):
 
     def get(self, entity_id: str) -> BaseModel:
         return self.__memory_storage[entity_id]
-    
+
     def clear(self):
         global_simple_storage[self.storage_name].clear()
 
 
 class GetAll:
-    
     def get_all(self):
         return list(global_simple_storage[self.storage_name].values())
-    
+
 
 # Implementations
 
+
 class InMemoryTransactionsDAO(BaseInMemoryDao, AbsTransactionsDAO):
+    storage_name = "transactions"
 
-    storage_name = 'transactions'
-
-    def filter(self, account_id: str, start_date: date, end_date: date, limit: int, offset: int) -> List[Transaction]:        
-        
-        filtered_items = global_simple_storage[self.storage_name].values()        
+    def filter(
+        self, account_id: str, start_date: date, end_date: date, limit: int, offset: int
+    ) -> List[Transaction]:
+        filtered_items = global_simple_storage[self.storage_name].values()
 
         if account_id:
-            filtered_items = filter(lambda x: x.account_id == account_id, filtered_items)
+            filtered_items = filter(
+                lambda x: x.account_id == account_id, filtered_items
+            )
 
         filtered_items = list(filtered_items)
 
         if offset >= len(filtered_items):
             return []
 
-        return list(filtered_items)[offset:offset+limit]
+        return list(filtered_items)[offset : offset + limit]
 
     def save_group(self, transactions: List[Transaction]):
         for t in transactions:
@@ -78,13 +80,8 @@ class InMemoryTransactionsDAO(BaseInMemoryDao, AbsTransactionsDAO):
 
 
 class InMemoryAccountsDAO(GetAll, BaseInMemoryDao, AbsAccountsDAO):
+    storage_name = "accounts"
 
-    storage_name = 'accounts'
-
-    def update_balance(self, account_id:str, balance: Decimal):
-        pass
 
 class InMemoryTransactionCategoriesDAO(BaseInMemoryDao, AbsTransactionsDAO, GetAll):
-
-    storage_name = 'categories'
-    
+    storage_name = "categories"

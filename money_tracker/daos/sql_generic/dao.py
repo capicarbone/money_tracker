@@ -1,3 +1,4 @@
+
 from uuid import uuid4
 from datetime import date, datetime
 from typing import List, Generic, TypeVar
@@ -49,7 +50,7 @@ class BaseSQLEntityDAO(Generic[T, S]):
 
             return result is not None
 
-    def get(self, entity_id: str) -> BaseModel:
+    def get(self, entity_id: str) -> S:
         with Session(self.engine) as session:
             return session.get(self.model_class, entity_id).to_object()
 
@@ -132,12 +133,18 @@ class GenericSQLTransactionDAO(
                 )
                 result = session.execute(stmt).scalars()
                 for row in result:
-                    session.delete(row)
+                    account_transaction = session.get(MappedAccount, row.account_id)
+                    account_transaction.balance -= row.change
+                    session.delete(row)                    
             else:
                 db_obj = session.get(MappedTransaction, transaction.id)
+                account_transaction = session.get(MappedAccount, db_obj.account_id)
+                account_transaction.balance -= db_obj.change
                 session.delete(db_obj)
 
             session.commit()
+
+    # TODO test delete many
 
     def filter(
         self,

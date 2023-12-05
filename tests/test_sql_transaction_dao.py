@@ -1,3 +1,4 @@
+
 import unittest
 from uuid import uuid4
 from decimal import Decimal
@@ -19,7 +20,7 @@ from tests.helpers import (
 )
 
 
-class TestSQLACategoryDAO(unittest.TestCase):
+class TestSQLATransactionDAO(unittest.TestCase):
     initial_accounts = []
 
     def setUp(self) -> None:
@@ -74,11 +75,23 @@ class TestSQLACategoryDAO(unittest.TestCase):
 
         transactions = [Transaction(**attr1), Transaction(**attr2)]
 
+        accounts_dao = GenericSQLAccountDAO(self.engine)
+
+        balances_initital_data = {}
+        for account in accounts_dao.get_all():
+            balances_initital_data[account.id] = account.balance
+
         new_transactions = self.dao.save_group(transactions)
 
         for new_transaction in new_transactions:
             self.assertIsNotNone(new_transaction.id)
             self.assertIsNotNone(new_transaction.group_id)
+
+            account = accounts_dao.get(new_transaction.account_id)
+            self.assertEqual(
+                account.balance,
+                new_transaction.change + balances_initital_data[account.id],
+            )
 
         self.assertEqual(new_transactions[0].group_id, new_transactions[1].group_id)
 
@@ -117,7 +130,17 @@ class TestSQLACategoryDAO(unittest.TestCase):
     def test_delete_transaction(self):
         test_transaction = self.dao.get("123")
 
+        accounts_dao = GenericSQLAccountDAO(self.engine)
+
+        account = accounts_dao.get(test_transaction.account_id)
+
+        initial_balance = account.balance        
+
         self.dao.delete(test_transaction)
+
+        account = accounts_dao.get(test_transaction.account_id)
+
+        self.assertEqual(account.balance, initial_balance - test_transaction.change)
 
         with Session(self.engine) as session:
             self.assertIsNone(session.get(MappedTransaction, 123))

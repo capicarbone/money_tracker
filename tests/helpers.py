@@ -88,7 +88,7 @@ def load_initial_transactions(dao: AbsTransactionsDAO):
         ],[
         Transaction(
             id="345",
-            change=-100,
+            change=700,
             account_id="234",
             category_id="234",
             transaction_type=INCOME_TRANSACTION_TYPE,
