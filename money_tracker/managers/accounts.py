@@ -1,7 +1,9 @@
+from ast import Dict
 from typing import List
 from datetime import date, datetime
 
 from money_tracker.models import (
+    ACCOUNT_TYPES_DICT,
     Account,
     HIGH_LIQUIDITY_TYPE,
     ACCOUNT_TYPES,
@@ -19,6 +21,9 @@ class AccountsManager:
 
     def get_all(self) -> List[Account]:
         return self.accounts_dao.get_all()
+    
+    def get_types(self) -> Dict:
+        return ACCOUNT_TYPES_DICT
 
     def create_account(
         self, name, account_type: str, liquidity_type=HIGH_LIQUIDITY_TYPE
