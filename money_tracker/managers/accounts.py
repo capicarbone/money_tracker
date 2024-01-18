@@ -1,4 +1,5 @@
 from ast import Dict
+from decimal import Decimal
 from typing import List
 from datetime import date, datetime
 
@@ -26,7 +27,8 @@ class AccountsManager:
         return ACCOUNT_TYPES_DICT
 
     def create_account(
-        self, name, account_type: str, liquidity_type=HIGH_LIQUIDITY_TYPE
+        self, name, account_type: str, liquidity_type=HIGH_LIQUIDITY_TYPE,
+        initial_balance=Decimal("0.00")
     ) -> Account:
         creation_date = datetime.now()
 
@@ -38,6 +40,7 @@ class AccountsManager:
             account_type=account_type,
             creation_date=creation_date,
             liquidity_type=liquidity_type,
+            balance=initial_balance
         )
 
         return self.accounts_dao.save(new_account)

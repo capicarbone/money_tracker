@@ -24,13 +24,13 @@ TRANSFER_OUT_TRANSACTION_TYPE = "tranout"
 
 
 ACCOUNT_TYPES_DICT = {
-    "Checking": CHECKING_ACCOUNT,
-    "Savings": SAVING_ACCOUNT,
-    "Liability": LIABILITIES_ACCOUNT,
-    "Investment": INVESTMENT_ACCOUNT
+    CHECKING_ACCOUNT: "Checking",
+    SAVING_ACCOUNT: "Savings",
+    LIABILITIES_ACCOUNT: "Liability",
+    INVESTMENT_ACCOUNT: "Investment"
 }
 
-ACCOUNT_TYPES = list(ACCOUNT_TYPES_DICT.values())
+ACCOUNT_TYPES = list(ACCOUNT_TYPES_DICT.keys())
 
 
 EXPENSE_CATEGORY = "exp"

@@ -27,7 +27,7 @@ class MappedAccount(Base):
         return Account(
             id=str(self.id),
             name=self.name,
-            balance=self.balance,
+            balance=self.balance.quantize(Decimal("0.00")),
             creation_date=self.creation_date,
             account_type=self.account_type,
             liquidity_type=self.liquidity_type,
