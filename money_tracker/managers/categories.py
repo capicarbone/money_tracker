@@ -1,6 +1,6 @@
 from typing import List
 from money_tracker.daos.base import AbsTransactionCategoryDAO
-from money_tracker.models import Category, EXPENSE_CATEGORY, INCOME_CATEGORY
+from money_tracker.models import Category, EXPENSE_CATEGORY, INCOME_CATEGORY, CATEGORY_TYPES_DICT
 
 class TransactionCategoriesManager:
     categories_dao : AbsTransactionCategoryDAO
@@ -31,5 +31,6 @@ class TransactionCategoriesManager:
         return self.create_category(name=name, category_type=INCOME_CATEGORY, parent_category_id=parent_category_id)
     
 
-        
+    def get_types(self):
+        return CATEGORY_TYPES_DICT
     

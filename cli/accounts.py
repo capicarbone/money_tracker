@@ -7,6 +7,7 @@ from money_tracker.daos.sql_generic.factory import SQLiteDAOFactory
 from money_tracker.models import CHECKING_ACCOUNT, HIGH_LIQUIDITY_TYPE
 
 app = typer.Typer()
+tracker = MoneyTracker(SQLiteDAOFactory("test.db"))
 
 
 @app.command("add")
@@ -18,10 +19,8 @@ def add_account(
     """
     Create a new account.
     """
-    factory = SQLiteDAOFactory("test.db")
-    tracker = MoneyTracker(factory)
 
-    new_account = tracker.accounts.create_account(name, account_type, liquidity_type)
+    new_account = tracker.accounts.create_account(name, account_type.upper(), liquidity_type)
 
     account_type_name = tracker.accounts.get_types()[account_type]
     print(f"{new_account.name}({account_type_name}) created with initial balance of {new_account.balance}")
@@ -30,10 +29,8 @@ def add_account(
 @app.command("list")
 def list_all():
     """
-    It lists all accounts.
+    List all accounts.
     """
-    factory = SQLiteDAOFactory("test.db")
-    tracker = MoneyTracker(factory)
 
     accounts = tracker.accounts.get_all()
 
@@ -47,8 +44,6 @@ def balances():
     """
     List all account with balances.
     """
-    factory = SQLiteDAOFactory("test.db")
-    tracker = MoneyTracker(factory)
 
     accounts = tracker.accounts.get_all()
 
@@ -58,10 +53,8 @@ def balances():
 @app.command("types")
 def list_types():
     """
-    It lists all account types.
+    List all account types.
     """
-    factory = SQLiteDAOFactory("test.db")
-    tracker = MoneyTracker(factory)
 
     print("Available account types:")
     for value, name in tracker.accounts.get_types().items():
