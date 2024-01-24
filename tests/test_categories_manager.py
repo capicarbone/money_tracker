@@ -32,7 +32,7 @@ class TestCategoryManager(unittest.TestCase):
 
     def test_create_valid_income_category(self):
       
-        income = self.manager.create_income_category("Service")
+        income = self.manager.create_income_category("Service", None)
 
         self.assertIsNotNone(income.id)
         self.assertEqual(income.category_type, INCOME_CATEGORY)

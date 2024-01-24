@@ -23,7 +23,7 @@ class TestSQLACategoryDAO(unittest.TestCase):
         load_initial_categories(self.dao)
 
     def test_create_valid_category(self):
-        attrs = {"name": "Travel", "parent_category_id": None, "category_type": "exp"}
+        attrs = {"name": "Travel", "parent_category_id": None, "category_type": "EXP"}
 
         test_category = Category(**attrs)
         saved_category = self.dao.save(test_category)
@@ -36,7 +36,7 @@ class TestSQLACategoryDAO(unittest.TestCase):
                 self.assertEqual(getattr(db_entity, attr), value)
 
     def test_create_valid_category_with_parent(self):
-        attrs = {"name": "Travel", "parent_category_id": "345", "category_type": "exp"}
+        attrs = {"name": "Travel", "parent_category_id": "345", "category_type": "EXP"}
 
         test_category = Category(**attrs)
         saved_category = self.dao.save(test_category)

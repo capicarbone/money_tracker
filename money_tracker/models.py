@@ -57,7 +57,7 @@ class Category(BaseModel):
     id: Optional[str] = None
     name: str
     parent_category_id: Optional[str] = None
-    category_type: Literal["exp", "inc"]
+    category_type: Literal["EXP", "INC"]
 
 
 class Transaction(BaseModel):
