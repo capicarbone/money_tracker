@@ -9,10 +9,12 @@ except ModuleNotFoundError:
 import typer
 import accounts
 import categories
+import transactions
 
 app = typer.Typer()
 app.add_typer(accounts.app, name="accounts")
 app.add_typer(categories.app, name="categories")
+app.add_typer(transactions.app, name="transactions")
 
 if __name__ == "__main__":
     app()

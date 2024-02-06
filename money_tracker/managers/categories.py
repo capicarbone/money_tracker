@@ -12,6 +12,15 @@ class TransactionCategoriesManager:
         return self.categories_dao.get_all()
     
 
+    def get_by_name(self, name) -> Category:
+        
+        categories = self.get_all()
+
+        try:
+            return next(filter(lambda x: x.name.lower() == name.lower(), categories))
+        except StopIteration:
+            raise Exception(f"Category not found by name {name}")
+
     def create_category(self, name: str, category_type: str, parent_category_id=None) -> Category:
         if self.categories_dao.exists(parent_category_id):
             parent_category : Category = self.categories_dao.get(parent_category_id)
