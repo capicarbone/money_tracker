@@ -176,3 +176,39 @@ def add_expense(
         print("Added transaction")
     except Exception as ex:
         print(ex)
+
+
+@app.command("transfer")
+def add_transfer(
+    amount: Annotated[str, typer.Argument()],
+    description: Annotated[str, typer.Argument()] = "",
+    from_account_name: Annotated[str, typer.Option()] = None,
+    from_account_id: Annotated[str, typer.Option()] = None,
+    to_account_name: Annotated[str, typer.Option()] = None,
+    to_account_id: Annotated[str, typer.Option()] = None,
+    execution_date: Annotated[
+        datetime, typer.Option(metavar="date", formats=["%Y-%m-%d", "%m-%d"])
+    ] = datetime.now(),
+    days_ago: Annotated[int, typer.Option()] = None,
+):
+    d_amount = Decimal(amount)
+
+    from_account = get_account(from_account_id, from_account_name)
+    to_account = get_account(to_account_id, to_account_name)
+
+    if not from_account or not to_account:
+        print("Account not found.")
+    try:
+
+        d_execution_date = get_execution_date(execution_date, days_ago)
+
+        tracker.transactions.add_transfer(
+            change=d_amount,
+            description=description,
+            execution_date=d_execution_date,
+            from_account_id=from_account.id,
+            to_account_id=to_account.id
+        )
+
+    except Exception as ex:
+        print(ex)
