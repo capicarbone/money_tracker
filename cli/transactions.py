@@ -3,6 +3,7 @@ from decimal import Decimal
 from typing_extensions import Annotated
 from sqlalchemy import true
 import typer
+from cli.utils import format_amount
 
 from money_tracker import MoneyTracker
 from money_tracker.daos.sql_generic.factory import SQLiteDAOFactory
@@ -207,8 +208,20 @@ def add_transfer(
             description=description,
             execution_date=d_execution_date,
             from_account_id=from_account.id,
-            to_account_id=to_account.id
+            to_account_id=to_account.id,
         )
 
     except Exception as ex:
         print(ex)
+
+
+@app.command()
+def list(limit: Annotated[int, typer.Option()] = 20):
+    transactions = tracker.transactions.get_transactions(limit=limit)
+    accounts_map = {a.id: a for a in tracker.accounts.get_all()}
+    categories_map = {c.id: c for c in tracker.categories.get_all()}
+
+    for t in transactions:
+        print(
+            f"{t.id} - {t.execution_date} - {accounts_map[t.account_id].name}, ${format_amount(t.change)} ({categories_map[t.category_id].name + ':' if t.category_id is not None else ''}{t.description})"
+        )

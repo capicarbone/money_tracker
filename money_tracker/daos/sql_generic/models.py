@@ -72,7 +72,7 @@ class MappedTransaction(Base):
             id=str(self.id),
             change=self.change,
             account_id=str(self.account_id),
-            category_id=str(self.category_id),
+            category_id=str(self.category_id) if self.category_id else None,
             transaction_type=self.transaction_type,
             description=self.description,
             execution_date=self.execution_date,
