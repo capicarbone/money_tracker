@@ -51,7 +51,7 @@ class Account(BaseModel):
     is_active: bool = True
     balance: Decimal = Decimal("0.0")
     # TODO add is_archived
-
+ 
 
 class Category(BaseModel):
     id: Optional[str] = None
