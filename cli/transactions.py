@@ -146,7 +146,7 @@ def add_income(
             category_name=category_name,
             execution_date=execution_date,
             days_ago=days_ago,
-        )        
+        )
     except Exception as ex:
         print(ex)
 
@@ -176,7 +176,7 @@ def add_expense(
             execution_date=execution_date,
             days_ago=days_ago,
         )
-        
+
     except Exception as ex:
         print(ex)
 
@@ -220,7 +220,8 @@ def add_transfer(
 
 
 @app.command()
-def list(limit: Annotated[int, typer.Option()] = 20):
-    transactions = tracker.transactions.get_transactions(limit=limit)
+def list(limit: Annotated[int, typer.Option()] = 20, 
+         offset: Annotated[int, typer.Option()] = 0):
+    transactions = tracker.transactions.get_transactions(limit=limit, offset=offset)
 
     print(as_json_list(transactions))
