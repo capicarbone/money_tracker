@@ -1,5 +1,7 @@
+import json
 import typer
 from typing_extensions import Annotated
+from cli.utils import as_json_list
 from money_tracker import MoneyTracker
 from money_tracker.daos.sql_generic.factory import SQLiteDAOFactory
 
@@ -16,7 +18,7 @@ def add_income_category(
         name, parent_category_id=parent_category_id
     )
 
-    print(f"Income category {new_category.name} created.")
+    print(new_category.model_dump_json())
 
 
 @app.command("add-expense-type")
@@ -28,15 +30,14 @@ def add_expense_category(
         name, parent_category_id=parent_category_id
     )
 
-    print(f"Expense category {new_category.name} created.")
+    print(new_category.model_dump_json())
 
 
 @app.command("list")
 def list_all():
     categories = tracker.categories.get_all()
 
-    for category in categories:
-        print(f"{category.id}: {category.name}")
+    print(as_json_list(categories))
 
 
 @app.command("types")
@@ -46,5 +47,4 @@ def list_types():
     """
     types = tracker.categories.get_types()
 
-    for value, name in types.items():
-        print(f"{value}: {name}")
+    print(json.dumps(types))

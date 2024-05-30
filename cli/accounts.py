@@ -1,4 +1,4 @@
-from decimal import Decimal
+import json
 import typer
 from typing_extensions import Annotated
 from cli.utils import as_json_list
@@ -41,4 +41,4 @@ def list_types():
     List all account types.
     """
     
-    print(tracker.accounts.get_types())
+    print(json.dumps(tracker.accounts.get_types()))

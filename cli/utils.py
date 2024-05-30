@@ -7,5 +7,5 @@ def format_amount(amount: Decimal):
 
 def as_json_list(objects):
     
-    return '[%s]' % ''.join([obj.model_dump_json() for obj in objects])
+    return '[%s]' % ','.join([obj.model_dump_json() for obj in objects])
         
