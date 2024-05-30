@@ -3,7 +3,7 @@ from decimal import Decimal
 from typing_extensions import Annotated
 from sqlalchemy import true
 import typer
-from cli.utils import format_amount
+from cli.utils import as_json_list, format_amount
 
 from money_tracker import MoneyTracker
 from money_tracker.daos.sql_generic.factory import SQLiteDAOFactory
@@ -110,10 +110,13 @@ def add_income_or_expense(
         "description": description,
     }
 
-    if is_income:
+    new_transaction = (
         tracker.transactions.add_income(**transaction_parameters)
-    else:
-        tracker.transactions.add_expense(**transaction_parameters)
+        if is_income
+        else tracker.transactions.add_expense(**transaction_parameters)
+    )
+
+    print(new_transaction.model_dump_json())
 
 
 # ------ Comands ------
@@ -143,8 +146,7 @@ def add_income(
             category_name=category_name,
             execution_date=execution_date,
             days_ago=days_ago,
-        )
-        print("Added transaction")
+        )        
     except Exception as ex:
         print(ex)
 
@@ -174,7 +176,7 @@ def add_expense(
             execution_date=execution_date,
             days_ago=days_ago,
         )
-        print("Added transaction")
+        
     except Exception as ex:
         print(ex)
 
@@ -203,13 +205,15 @@ def add_transfer(
 
         d_execution_date = get_execution_date(execution_date, days_ago)
 
-        tracker.transactions.add_transfer(
+        transfer_in, transfer_out = tracker.transactions.add_transfer(
             change=d_amount,
             description=description,
             execution_date=d_execution_date,
             from_account_id=from_account.id,
             to_account_id=to_account.id,
         )
+
+        print(as_json_list([transfer_in, transfer_out]))
 
     except Exception as ex:
         print(ex)
@@ -218,10 +222,5 @@ def add_transfer(
 @app.command()
 def list(limit: Annotated[int, typer.Option()] = 20):
     transactions = tracker.transactions.get_transactions(limit=limit)
-    accounts_map = {a.id: a for a in tracker.accounts.get_all()}
-    categories_map = {c.id: c for c in tracker.categories.get_all()}
 
-    for t in transactions:
-        print(
-            f"{t.id} - {t.execution_date} - {accounts_map[t.account_id].name}, ${format_amount(t.change)} ({categories_map[t.category_id].name + ':' if t.category_id is not None else ''}{t.description})"
-        )
+    print(as_json_list(transactions))
