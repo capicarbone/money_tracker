@@ -5,9 +5,6 @@ from money_tracker.managers.transactions import TransactionsManager
 
 
 class MoneyTracker:
-    transactions: TransactionsManager = None
-    accounts: AccountsManager = None
-    categories: TransactionCategoriesManager = None
 
     def __init__(self, daos_factory: AbsDAOFactory) -> None:
         
