@@ -3,17 +3,16 @@ from decimal import Decimal
 from typing_extensions import Annotated
 from sqlalchemy import true
 import typer
-from cli.utils import as_json_list, format_amount
+from cli.utils import as_json_list, format_amount, instance_dao_factory
 
 from money_tracker import MoneyTracker
 from money_tracker.daos.sql_generic.factory import SQLiteDAOFactory
 from money_tracker.models import EXPENSE_CATEGORY, INCOME_CATEGORY, Account, Category
 
 app = typer.Typer()
-tracker = MoneyTracker(SQLiteDAOFactory("test.db"))
 
 
-def get_category(category_id, category_name) -> Category:
+def get_category(tracker:MoneyTracker, category_id, category_name) -> Category:
     if not category_id:
         try:
             return tracker.categories.get_by_name(category_name)
@@ -21,12 +20,12 @@ def get_category(category_id, category_name) -> Category:
             pass
     else:
         if tracker.categories.exists(category_id):
-            return category_id
+            return tracker.categories.get(category_id)
 
     return None
 
 
-def get_account(account_id, account_name) -> Account:
+def get_account(tracker: MoneyTracker, account_id, account_name) -> Account:
     if not account_id:
         try:
             return tracker.accounts.get_by_name(account_name)
@@ -59,6 +58,7 @@ def get_execution_date(execution_date: datetime, days_ago: int) -> date:
 
 
 def add_income_or_expense(
+    source: str,
     is_income: bool,
     amount: str,
     description: str,
@@ -69,21 +69,23 @@ def add_income_or_expense(
     execution_date: datetime,
     days_ago: int,
 ):
+    
+    tracker = MoneyTracker(instance_dao_factory(source))
 
     d_amount = Decimal(amount) if is_income else -Decimal(amount)
 
     if not account_name and not account_id:
         raise Exception(
-            "Account is missing, please specify account_name or account_id parameter."
+            "Account is missing, please specify account-name or account-id parameter."
         )
 
     if not category_name and not category_id:
         raise Exception(
-            "Category is missing, please specify category_name or category_id parameter."
+            "Category is missing, please specify category-name or category-id parameter."
         )
 
-    account = get_account(account_id, account_name)
-    category = get_category(category_id, category_name)
+    account = get_account(tracker, account_id, account_name)
+    category = get_category(tracker, category_id, category_name)
 
     if not account:
         raise Exception("Account not found")
@@ -124,6 +126,7 @@ def add_income_or_expense(
 
 @app.command("receive")
 def add_income(
+    source: Annotated[str, typer.Option()],
     amount: Annotated[str, typer.Argument()],
     description: Annotated[str, typer.Argument()] = "",
     account_name: Annotated[str, typer.Option()] = None,
@@ -134,10 +137,11 @@ def add_income(
         datetime, typer.Option(metavar="date", formats=["%Y-%m-%d", "%m-%d"])
     ] = datetime.now(),
     days_ago: Annotated[int, typer.Option()] = None,
-):
+):    
     try:
         add_income_or_expense(
-            True,
+            source=source,
+            is_income=True,
             amount=amount,
             description=description,
             account_name=account_name,
@@ -153,6 +157,7 @@ def add_income(
 
 @app.command("spend")
 def add_expense(
+    source: Annotated[str, typer.Option()],
     amount: Annotated[str, typer.Argument()],
     description: Annotated[str, typer.Argument()] = "",
     account_name: Annotated[str, typer.Option()] = None,
@@ -164,9 +169,11 @@ def add_expense(
     ] = datetime.now(),
     days_ago: Annotated[int, typer.Option()] = None,
 ):
+    
     try:
         add_income_or_expense(
-            False,
+            source=source,
+            is_income=False,
             amount=amount,
             description=description,
             account_name=account_name,
@@ -183,6 +190,7 @@ def add_expense(
 
 @app.command("transfer")
 def add_transfer(
+    source: Annotated[str, typer.Option()],
     amount: Annotated[str, typer.Argument()],
     description: Annotated[str, typer.Argument()] = "",
     from_account_name: Annotated[str, typer.Option()] = None,
@@ -194,10 +202,11 @@ def add_transfer(
     ] = datetime.now(),
     days_ago: Annotated[int, typer.Option()] = None,
 ):
+    tracker = MoneyTracker(instance_dao_factory(source))
     d_amount = Decimal(amount)
 
-    from_account = get_account(from_account_id, from_account_name)
-    to_account = get_account(to_account_id, to_account_name)
+    from_account = get_account(tracker, from_account_id, from_account_name)
+    to_account = get_account(tracker, to_account_id, to_account_name)
 
     if not from_account or not to_account:
         print("Account not found.")
@@ -220,8 +229,12 @@ def add_transfer(
 
 
 @app.command()
-def list(limit: Annotated[int, typer.Option()] = 20, 
+def list(
+    source: Annotated[str, typer.Option()],
+    limit: Annotated[int, typer.Option()] = 20, 
          offset: Annotated[int, typer.Option()] = 0):
+    
+    tracker = MoneyTracker(instance_dao_factory(source))
     transactions = tracker.transactions.get_transactions(limit=limit, offset=offset)
 
     print(as_json_list(transactions))

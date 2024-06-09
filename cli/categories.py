@@ -29,7 +29,6 @@ def add_expense_category(
     source: Annotated[str, typer.Option()],
     name: Annotated[str, typer.Argument()],
     parent_category_id: Annotated[str, typer.Argument()] = None,
-    
 ):
     tracker = MoneyTracker(instance_dao_factory(source))
     new_category = tracker.categories.create_expense_category(
@@ -50,7 +49,9 @@ def list_all(
 
 
 @app.command("types")
-def list_types(source: Annotated[str, typer.Option()],):
+def list_types(
+    source: Annotated[str, typer.Option()],
+):
     """
     List category types.
     """
