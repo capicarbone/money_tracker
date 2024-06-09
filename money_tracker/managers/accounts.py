@@ -15,7 +15,6 @@ from money_tracker.daos.base import AbsAccountsDAO
 
 
 class AccountsManager:
-    accounts_dao: AbsAccountsDAO = None
 
     def __init__(self, accounts_dao: AbsAccountsDAO) -> None:
         self.accounts_dao = accounts_dao

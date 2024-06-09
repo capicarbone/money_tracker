@@ -47,9 +47,10 @@ class AbsTransactionCategoryDAO(DataAccessObject):
 
 class AbsDAOFactory():
 
-    transaction_dao : AbsTransactionsDAO = None
-    account_dao : AbsAccountsDAO = None
-    category_dao : AbsTransactionCategoryDAO = None
+    def __init__(self) -> None:
+        self.transaction_dao: AbsTransactionsDAO = None
+        self.category_dao: AbsTransactionCategoryDAO = None
+        self.account_dao: AbsAccountsDAO = None
 
     def _create_transaction_dao(self) -> AbsTransactionsDAO:
         raise NotImplementedError()

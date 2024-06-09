@@ -18,9 +18,6 @@ from money_tracker.daos.base import (
 
 
 class TransactionsManager:
-    accounts_dao: AbsAccountsDAO
-    transactions_dao: AbsTransactionsDAO
-    categories_dao: AbsTransactionCategoryDAO
 
     def __init__(
         self,

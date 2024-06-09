@@ -14,9 +14,9 @@ from money_tracker.daos.sql_generic.models import Base
 
 
 class SQLiteDAOFactory(AbsDAOFactory):
-    engine: Engine = None
 
     def __init__(self, file_path) -> None:
+        super().__init__()
         self.engine = create_engine(f"sqlite+pysqlite:///{file_path}")
 
         if not inspect(self.engine).has_table("account"):
